@@ -29,7 +29,7 @@ for each ttAllFiles where
     vBranchDir = ttAllFiles.pathAndFile.
     vTrunkDir = replace(vBranchDir, "branch","trunk").
     
-    input through value(substitute("cmd.exe /C C:\Users\skornejevas\Desktop\code\DOS\test.bat &1 &2",vBranchDir,vTrunkDir)) no-echo.
+    input through value(substitute("cmd.exe /C C:\Users\skornejevas\Desktop\code\DOS\diff.bat &1 &2",vBranchDir,vTrunkDir)) no-echo.
     repeat:
         import unformatted vCompared.
         
