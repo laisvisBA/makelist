@@ -1,0 +1,36 @@
+Testai:
+
+1) ..\mltest\branch\4uzd      pakeisti .p
+2) ..\mltest\branch\1uzd      pakeisti .p .cls ir .i (pirmo lygio)
+3) ..\mltest\branch\sergejaus pakeisti .i (antro ir trecio lygio)
+
+-------Ka reikia perkompiliuot------------------------
+1)
+iteminfo.p (nuimta no-error)
+updateorderline.p (find last ttOrderline)
+
+2)
+mainWindow.p (ttorder.i (field WarehouseNum  as int))
+neworderline.p (display Ordernum Itemnum Qty)
+Item.cls (trintas klases aprasas)
+
+3)
+main.p (pakeista ttItemInfo.i) ir ja naudoja
+itemList.p (pakeista ttItemInfo.i) turi include, net nenaudoja. Turi viestiek perkompiliuot
+
+-------------------KAS KA NAUDOJA-------------------------------
+main.p naudoja ttItemInfo
+{ttOrders.i &name="ttOrders"} -> {ttItemList.i &name="ttItemList"} -> {ttItemInfo.i &name="ttItemInfo"}
+
+newOrder.p naudoja ttOrderline
+{ttOrderline.i &name="ttOrderline"}
+
+itemList.p naudoja ttItemList
+{ttItemList.i &name="ttItemList"} -> {ttItemInfo.i &name="ttItemInfo"}.
+
+editOrderline.p
+{ttOrderline.i &name="ttOrderline"}
+
+itemInfo.p
+{ttItemInfo.i &name="ttItemInfo"}
+
