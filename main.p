@@ -3,12 +3,8 @@
 {ttAllFiles.i &name="ttMakeList"}
 {ttXREF.i &name="ttXREF"}
 
-define variable vLine as character no-undo.
-def var vDir as char no-undo.
-
 /* List all files to be checked */
-/* Enter your path to branch */
-input through value("CMD.EXE /C DIR ~"\branch\1uzd\*.p~" ~"\branch\1uzd\*.cls~" ~"\branch\1uzd\*.i~" /S /B") no-echo.
+input through value("CMD.EXE /C DIR ~"C:\Users\skornejevas\Desktop\MakeList\branch\1uzd\*.p~" ~"C:\Users\skornejevas\Desktop\MakeList\branch\1uzd\*.cls~" ~"C:\Users\skornejevas\Desktop\MakeList\branch\1uzd\*.i~" /S /B") no-echo.
 repeat:
     create ttAllFiles.
     import unformatted ttAllFiles.pathAndFile.
@@ -28,23 +24,23 @@ for each ttAllFiles where
          ttAllFiles.pathAndFile contains ".i":
          
     vBranchDir = ttAllFiles.pathAndFile.
-    vTrunkDir = replace(vBranchDir, "branch","trunk").
-    /* Enter your path to diff.bat */
-    input through value(substitute("cmd.exe /C diff.bat &1 &2",vBranchDir,vTrunkDir)) no-echo.
+    vTrunkDir = replace(vBranchDir, "branch", "trunk").
+    
+    input through value(substitute("cmd.exe /C C:\Users\skornejevas\Desktop\code\DOS\diff.bat &1 &2", vBranchDir, vTrunkDir)) no-echo.
     repeat:
         import unformatted vCompared.
         
-            /* If file was changed */
+            /* If file is different */
             if vCompared <> "same" then do:
 
-                /* Check if File is an include */
+                /* Check if File is an include, move to ttIncludesHasChanged */
                 if substring(ttAllFiles.pathAndFile, length(ttAllFiles.pathAndFile) - 1, 2) = ".i" then do:
                     create ttIncludesHasChanged.
                     ttIncludesHasChanged.pathAndFile = ttAllFiles.pathAndFile.
                     delete ttAllFiles.
                 end.
                 
-                /* File is not an include */
+                /* File is not an include, move to ttMakeList */
                 else do:
                     create ttMakeList.
                     ttMakeList.pathAndFile = ttAllFiles.pathAndFile.
@@ -60,9 +56,9 @@ for each ttMakeList:
 end.
 
 for each ttAllFiles:
-message "ttAllFiles: "ttAllFiles.pathAndFile view-as alert-box.
+    message "ttAllFiles: "ttAllFiles.pathAndFile view-as alert-box.
 end.
 
 for each ttIncludesHasChanged:
-message "Include: " ttIncludesHasChanged.pathAndFile view-as alert-box.
+    message "Include: " ttIncludesHasChanged.pathAndFile view-as alert-box.
 end.
