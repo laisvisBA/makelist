@@ -1,14 +1,14 @@
-{/home/justas/makelistFromGit/ttAllFiles.i &name="ttAllFiles"}
-{/home/justas/makelistFromGit/ttAllFiles.i &name="ttIncludesHasChanged"}
-{/home/justas/makelistFromGit/ttAllFiles.i &name="ttMakeList"}
-{/home/justas/makelistFromGit/ttXREF.i &name="ttXREF"}
+{ttAllFiles.i &name="ttAllFiles"}
+{ttAllFiles.i &name="ttIncludesHasChanged"}
+{ttAllFiles.i &name="ttMakeList"}
+{ttXREF.i &name="ttXREF"}
 
 /* List all files to be checked */
-input through value("dir /home/justas/makelistFromGit/branch/1uzd/*.p /home/justas/makelistFromGit/branch/1uzd/*.cls /home/justas/makelistFromGit/branch/1uzd/*.i -S -B") no-echo.
+input through value("dir /home/laisvis/makelist/branch/1uzd/*.p /home/laisvis/makelist/branch/1uzd/*.cls /home/laisvis/makelist/branch/1uzd/*.i -S -B") no-echo.
 repeat:
     create ttAllFiles.
     import unformatted ttAllFiles.pathAndFile.
-    put unformatted ttAllFiles.pathAndFile skip.
+	put unformatted ttAllFiles.pathAndFile skip 1.
 end.
 input close.
 
@@ -26,12 +26,12 @@ for each ttAllFiles where
     vBranchDir = ttAllFiles.pathAndFile.
     vTrunkDir = replace(vBranchDir, "branch", "trunk").
     
-    input through value(substitute("/home/justas/makelistFromGit/diff.sh $1 $2", vBranchDir, vTrunkDir)) no-echo.
+    input through value(substitute("/home/laisvis/makelist/diff.sh &1 &2", vBranchDir, vTrunkDir)).
     repeat:
         import unformatted vCompared.
         
             /* If file is different */
-            if vCompared <> "same" then do:
+            if vCompared = "different" then do:
 
                 /* Check if File is an include, move to ttIncludesHasChanged */
                 if substring(ttAllFiles.pathAndFile, length(ttAllFiles.pathAndFile) - 1, 2) = ".i" then do:
@@ -51,6 +51,6 @@ for each ttAllFiles where
 end.
 input close.
 
-temp-table ttAllFiles:write-xml("file", "ttallfiles.xml", true, ?, ?, false, false).
+temp-table ttAllFiles:write-xml("file", "ttAllFiles.xml", true, ?, ?, false, false).
 temp-table ttIncludesHasChanged:write-xml("file", "ttIncludesHasChanged.xml", true, ?, ?, false, false).
 temp-table ttMakeList:write-xml("file", "ttMakeList.xml", true, ?, ?, false, false).
