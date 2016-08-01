@@ -26,7 +26,7 @@ for each ttAllFiles where
     vBranchDir = ttAllFiles.pathAndFile.
     vTrunkDir = replace(vBranchDir, "branch", "trunk").
     
-    input through value(substitute("/home/justas/makelistFromGit/diff.sh &1 &2", vBranchDir, vTrunkDir)) no-echo.
+    input through value(substitute("/home/justas/makelistFromGit/diff.sh $1 $2", vBranchDir, vTrunkDir)) no-echo.
     repeat:
         import unformatted vCompared.
         
@@ -53,4 +53,4 @@ input close.
 
 temp-table ttAllFiles:write-xml("file", "ttallfiles.xml", true, ?, ?, false, false).
 temp-table ttIncludesHasChanged:write-xml("file", "ttIncludesHasChanged.xml", true, ?, ?, false, false).
-temp-table ttAllFiles:write-xml("file", "ttAllFiles.xml", true, ?, ?, false, false).
+temp-table ttMakeList:write-xml("file", "ttMakeList.xml", true, ?, ?, false, false).
